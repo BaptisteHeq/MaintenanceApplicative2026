@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 // REFACTOR ME
 public class Game implements IGame {
-   ArrayList<String> players = new ArrayList<>();
+   ArrayList players = new ArrayList();
    int[] places = new int[6];
    int[] purses = new int[6];
    boolean[] inPenaltyBox = new boolean[6];
@@ -54,14 +54,12 @@ public class Game implements IGame {
       System.out.println(players.get(currentPlayer) + " is the current player");
       System.out.println("They have rolled a " + roll);
 
-      //places[currentPlayer] = places[currentPlayer] + roll;
-
       if (inPenaltyBox[currentPlayer]) {
          if (roll % 2 != 0) {
             isGettingOutOfPenaltyBox = true;
 
             System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-            places[currentPlayer] = places[currentPlayer] + roll; //
+            places[currentPlayer] = places[currentPlayer] + roll;
             if (places[currentPlayer] > 12) places[currentPlayer] = places[currentPlayer] - 12;
 
             System.out.println(players.get(currentPlayer)
@@ -76,7 +74,7 @@ public class Game implements IGame {
 
       } else {
 
-         places[currentPlayer] = places[currentPlayer] + roll; //
+         places[currentPlayer] = places[currentPlayer] + roll;
          if (places[currentPlayer] > 12) places[currentPlayer] = places[currentPlayer] - 12;
 
          System.out.println(players.get(currentPlayer)
@@ -116,7 +114,7 @@ public class Game implements IGame {
    public boolean handleCorrectAnswer() {
       if (inPenaltyBox[currentPlayer]) {
          if (isGettingOutOfPenaltyBox) {
-            System.out.println("Answer was correct!!!!");
+            System.out.println("Answer was corrent!!!!");
             purses[currentPlayer]++;
             System.out.println(players.get(currentPlayer)
                                + " now has "
@@ -137,7 +135,7 @@ public class Game implements IGame {
 
       } else {
 
-         System.out.println("Answer was correct!!!!");
+         System.out.println("Answer was corrent!!!!");
          purses[currentPlayer]++;
          System.out.println(players.get(currentPlayer)
                             + " now has "
