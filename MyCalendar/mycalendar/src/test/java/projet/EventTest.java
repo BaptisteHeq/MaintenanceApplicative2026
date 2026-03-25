@@ -39,4 +39,5 @@ class EventTest {
 
         assertEquals("", event.description());
     }
+
 }
