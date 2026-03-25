@@ -25,7 +25,7 @@ class CalendarManagerTest {
                 LocalDateTime.of(2026, 3, 20, 23, 59));
 
         assertEquals(1, result.size());
-        assertEquals("Dentiste", result.get(0).title);
+        assertEquals("Dentiste", result.get(0).title.valeur());
     }
 
     @Test
@@ -54,7 +54,7 @@ class CalendarManagerTest {
                 LocalDateTime.of(2026, 3, 5, 23, 59));
 
         assertEquals(1, result.size());
-        assertEquals("Sport", result.get(0).title);
+        assertEquals("Sport", result.get(0).title.valeur());
     }
 
     @Test

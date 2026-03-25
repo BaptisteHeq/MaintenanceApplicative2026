@@ -1,9 +1,10 @@
 package projet;
+
 import java.time.LocalDateTime;
 
 public class Event {
     public String type; // "RDV_PERSONNEL", "REUNION", "PERIODIQUE"
-    public String title;
+    public TitreEvenement title;
     public String proprietaire;
     public LocalDateTime dateDebut;
     public int dureeMinutes;
@@ -12,7 +13,13 @@ public class Event {
     public int frequenceJours; // uniquement pour PERIODIQUE
 
     public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
-                 String lieu, String participants, int frequenceJours) {
+            String lieu, String participants, int frequenceJours) {
+        this(type, new TitreEvenement(title), proprietaire, dateDebut, dureeMinutes, lieu, participants,
+                frequenceJours);
+    }
+
+    public Event(String type, TitreEvenement title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
+            String lieu, String participants, int frequenceJours) {
         this.type = type;
         this.title = title;
         this.proprietaire = proprietaire;
