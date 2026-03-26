@@ -34,12 +34,6 @@ public class Event {
     }
 
     public String description() {
-        if (TypeEvenement.RDV_PERSONNEL.equals(type.valeur())) {
-            return "RDV : " + title + " à " + dateDebut.toString();
-        }
-        if (TypeEvenement.REUNION.equals(type.valeur())) {
-            return "Réunion : " + title + " à " + lieu + " avec " + participants;
-        }
-        return "Événement périodique : " + title + " tous les " + frequenceJours.valeur() + " jours";
+        return type.decrire(this);
     }
 }

@@ -51,5 +51,4 @@ public class TitreEvenementTest {
         assertNotEquals(titre, "Réunion");
     }
 
-    
 }
