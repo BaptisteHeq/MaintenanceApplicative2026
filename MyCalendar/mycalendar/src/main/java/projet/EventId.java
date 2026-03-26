@@ -2,9 +2,11 @@ package projet;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 public final class EventId {
+    private static final AtomicLong COMPTEUR = new AtomicLong(0);
+
     private final String valeur;
 
     public EventId(String valeur) {
@@ -15,7 +17,7 @@ public final class EventId {
     }
 
     public static EventId nouveau() {
-        return new EventId(UUID.randomUUID().toString());
+        return new EventId(String.valueOf(COMPTEUR.incrementAndGet()));
     }
 
     public String valeur() {

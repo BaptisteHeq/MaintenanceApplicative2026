@@ -33,6 +33,14 @@ class EventIdTest {
     }
 
     @Test
+    void genereDesIdentifiantsIncrementaux() {
+        long premier = Long.parseLong(EventId.nouveau().valeur());
+        long second = Long.parseLong(EventId.nouveau().valeur());
+
+        assertEquals(premier + 1, second);
+    }
+
+    @Test
     void egaliteBaseeSurValeur() {
         EventId id1 = new EventId("evt-123");
         EventId id2 = new EventId("evt-123");
