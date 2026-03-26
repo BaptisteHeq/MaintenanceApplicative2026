@@ -39,4 +39,27 @@ class EventTest {
                 LocalDateTime.of(2026, 3, 20, 7, 0), 0, "", "", 0));
     }
 
+    @Test
+    void constructeurVoInitialiseTousLesChamps() {
+        TypeEvenement type = new TypeEvenement(TypeEvenement.REUNION);
+        TitreEvenement titre = new TitreEvenement("Comite");
+        ProprietaireEvenement proprietaire = new ProprietaireEvenement("Alice");
+        LocalDateTime debut = LocalDateTime.of(2026, 4, 2, 14, 0);
+        DureeEvenement duree = new DureeEvenement(30);
+        LieuEvenement lieu = new LieuEvenement("Salle A");
+        ParticipantsEvenement participants = new ParticipantsEvenement("Alice, Bob");
+        FrequenceJours frequence = new FrequenceJours(0);
+
+        Event event = new Event(type, titre, proprietaire, debut, duree, lieu, participants, frequence);
+
+        assertEquals(type, event.type);
+        assertEquals(titre, event.title);
+        assertEquals(proprietaire, event.proprietaire);
+        assertEquals(debut, event.dateDebut);
+        assertEquals(duree, event.dureeMinutes);
+        assertEquals(lieu, event.lieu);
+        assertEquals(participants, event.participants);
+        assertEquals(frequence, event.frequenceJours);
+    }
+
 }
