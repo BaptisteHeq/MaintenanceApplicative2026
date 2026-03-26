@@ -32,9 +32,9 @@ class EventTest {
     void descriptionPeriodique() {
         Event event = event("PERIODIQUE", "Sport", "Alice",
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 7, 0)),
-                0, "", "", 2);
+                0, "", "", FrequenceJours.HEBDOMADAIRE);
 
-        assertEquals("Événement périodique : Sport tous les 2 jours", event.description());
+        assertEquals("Événement périodique : Sport (hebdomadaire)", event.description());
     }
 
     @Test

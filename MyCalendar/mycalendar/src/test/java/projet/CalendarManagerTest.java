@@ -79,11 +79,12 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 ajouterEvent(manager, "PERIODIQUE", "Sport", "Alice",
-                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 1, 8, 0)), 0, "", "", 2);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 1, 8, 0)), 0, "", "",
+                                FrequenceJours.HEBDOMADAIRE);
 
                 List<Event> result = manager.eventsDansPeriode(
-                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 5, 0, 0)),
-                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 5, 23, 59)));
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 8, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 8, 23, 59)));
 
                 assertEquals(1, result.size());
                 assertEquals("Sport", result.get(0).title.valeur());
@@ -94,7 +95,8 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 ajouterEvent(manager, "PERIODIQUE", "Sport", "Alice",
-                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 1, 8, 0)), 0, "", "", 2);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 1, 8, 0)), 0, "", "",
+                                FrequenceJours.HEBDOMADAIRE);
 
                 List<Event> result = manager.eventsDansPeriode(
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 4, 0, 0)),
@@ -137,7 +139,7 @@ class CalendarManagerTest {
 
                 Event e1 = event("PERIODIQUE", "A", "Alice",
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
-                                30, "", "", 1);
+                                30, "", "", FrequenceJours.HEBDOMADAIRE);
                 Event e2 = event("REUNION", "B", "Bob",
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
                                 30, "Salle", "Bob", 0);
@@ -154,7 +156,7 @@ class CalendarManagerTest {
                                 30, "Salle", "Alice", 0);
                 Event e2 = event("PERIODIQUE", "B", "Bob",
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
-                                30, "", "", 1);
+                                30, "", "", FrequenceJours.HEBDOMADAIRE);
 
                 assertTrue(manager.conflit(e1, e2));
         }
@@ -165,7 +167,7 @@ class CalendarManagerTest {
 
                 Event e1 = event("PERIODIQUE", "A", "Alice",
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 6, 0)),
-                                30, "", "", 1);
+                                30, "", "", FrequenceJours.HEBDOMADAIRE);
                 Event e2 = event("REUNION", "B", "Bob",
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
                                 30, "Salle", "Bob", 0);

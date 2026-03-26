@@ -77,7 +77,7 @@ public class MyCalendarTest {
                 "non",
                 "4", // ajouter périodique
                 "Sport",
-                "2026", "3", "21", "7", "0", "2",
+                "2026", "3", "21", "7", "0", "7",
                 "5", // suppression par id
                 "inconnu",
                 "1", // menu visualisation

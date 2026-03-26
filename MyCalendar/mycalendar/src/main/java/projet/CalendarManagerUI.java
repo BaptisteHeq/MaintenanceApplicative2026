@@ -64,7 +64,7 @@ public final class CalendarManagerUI {
         this.durationField = new JTextField("30");
         this.locationField = new JTextField();
         this.participantsField = new JTextField();
-        this.frequencyField = new JTextField("0");
+        this.frequencyField = new JTextField(String.valueOf(FrequenceJours.HEBDOMADAIRE));
         this.deleteIdField = new JTextField();
 
         this.tableModel = new DefaultTableModel(
@@ -114,7 +114,7 @@ public final class CalendarManagerUI {
         formPanel.add(locationField);
         formPanel.add(new JLabel("Participants (reunion)"));
         formPanel.add(participantsField);
-        formPanel.add(new JLabel("Frequence jours (periodique)"));
+        formPanel.add(new JLabel("Frequence periodique (7/30/365)"));
         formPanel.add(frequencyField);
 
         JButton addButton = new JButton("Ajouter");

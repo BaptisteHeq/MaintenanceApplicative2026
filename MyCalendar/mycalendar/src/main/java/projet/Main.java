@@ -190,7 +190,7 @@ public class Main {
                                 new DureeEvenement(duree),
                                 new LieuEvenement(""),
                                 new ParticipantsEvenement(""),
-                                new FrequenceJours(0));
+                                new FrequenceJours(FrequenceJours.AUCUNE));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -230,7 +230,7 @@ public class Main {
                                 new DureeEvenement(duree2),
                                 new LieuEvenement(lieu),
                                 new ParticipantsEvenement(participants),
-                                new FrequenceJours(0));
+                                new FrequenceJours(FrequenceJours.AUCUNE));
 
                         System.out.println("Événement ajouté.");
                         break;
@@ -249,14 +249,14 @@ public class Main {
                         int heure3 = Integer.parseInt(scanner.nextLine());
                         System.out.print("Minute début (0-59) : ");
                         int minute3 = Integer.parseInt(scanner.nextLine());
-                        System.out.print("Frequence (en jours) : ");
+                        System.out.print("Frequence periodique (7=hebdo, 30=mensuelle, 365=annuelle) : ");
                         int frequence = Integer.parseInt(scanner.nextLine());
 
                         calendar.ajouterEvent(new TypeEvenement(TypeEvenement.PERIODIQUE),
                                 new TitreEvenement(titre3),
                                 new ProprietaireEvenement(utilisateur),
                                 new DateHeureEvenement(LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3)),
-                                new DureeEvenement(0),
+                                new DureeEvenement(FrequenceJours.AUCUNE),
                                 new LieuEvenement(""),
                                 new ParticipantsEvenement(""),
                                 new FrequenceJours(frequence));
