@@ -29,6 +29,23 @@ class CalendarManagerTest {
         }
 
         @Test
+        void recupererDansPeriodeAvecVoPeriode() {
+                CalendarManager manager = new CalendarManager();
+
+                manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
+                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+
+                PeriodeEvenements periode = new PeriodeEvenements(
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 23, 59)));
+
+                List<Event> result = manager.eventsDansPeriode(periode);
+
+                assertEquals(1, result.size());
+                assertEquals("Dentiste", result.get(0).title.valeur());
+        }
+
+        @Test
         void evenementHorsPeriodeNonRetourne() {
                 CalendarManager manager = new CalendarManager();
 

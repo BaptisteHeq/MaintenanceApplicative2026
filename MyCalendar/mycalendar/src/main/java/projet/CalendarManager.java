@@ -27,13 +27,17 @@ public class CalendarManager {
     }
 
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        return eventsDansPeriode(new DateHeureEvenement(debut), new DateHeureEvenement(fin));
+        return eventsDansPeriode(new PeriodeEvenements(new DateHeureEvenement(debut), new DateHeureEvenement(fin)));
     }
 
     public List<Event> eventsDansPeriode(DateHeureEvenement debut, DateHeureEvenement fin) {
+        return eventsDansPeriode(new PeriodeEvenements(debut, fin));
+    }
+
+    public List<Event> eventsDansPeriode(PeriodeEvenements periode) {
         List<Event> result = new ArrayList<>();
         for (Event e : events) {
-            if (e.type.estDansPeriode(e, debut, fin)) {
+            if (e.type.estDansPeriode(e, periode.debut(), periode.fin())) {
                 result.add(e);
             }
         }
