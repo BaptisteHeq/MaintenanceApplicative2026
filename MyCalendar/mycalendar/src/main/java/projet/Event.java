@@ -11,15 +11,6 @@ public class Event {
     public ParticipantsEvenement participants; // separes par virgules (pour REUNION uniquement)
     public FrequenceJours frequenceJours; // uniquement pour PERIODIQUE
 
-    public Event(String type, String title, String proprietaire, DateHeureEvenement dateDebut, int dureeMinutes,
-            String lieu, String participants, int frequenceJours) {
-        this(EventId.nouveau(), new TypeEvenement(type), new TitreEvenement(title),
-                new ProprietaireEvenement(proprietaire), dateDebut,
-                new DureeEvenement(dureeMinutes), new LieuEvenement(lieu),
-                new ParticipantsEvenement(participants),
-                new FrequenceJours(frequenceJours));
-    }
-
     public Event(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire,
             DateHeureEvenement dateDebut,
             DureeEvenement dureeMinutes,

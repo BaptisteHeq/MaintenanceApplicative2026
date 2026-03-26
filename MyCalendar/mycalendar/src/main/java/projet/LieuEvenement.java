@@ -15,13 +15,7 @@ public final class LieuEvenement {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof LieuEvenement other)) {
-            return false;
-        }
-        return valeur.equals(other.valeur);
+        return obj instanceof LieuEvenement other && valeur.equals(other.valeur);
     }
 
     @Override

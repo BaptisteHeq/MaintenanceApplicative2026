@@ -32,13 +32,7 @@ public final class DateHeureEvenement {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof DateHeureEvenement other)) {
-            return false;
-        }
-        return valeur.equals(other.valeur);
+        return obj instanceof DateHeureEvenement other && valeur.equals(other.valeur);
     }
 
     @Override

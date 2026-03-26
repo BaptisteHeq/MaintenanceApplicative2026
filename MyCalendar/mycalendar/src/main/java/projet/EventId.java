@@ -1,6 +1,7 @@
 package projet;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public final class EventId {
@@ -8,10 +9,9 @@ public final class EventId {
 
     public EventId(String valeur) {
         String normalise = Objects.requireNonNull(valeur, "L'identifiant est requis").trim();
-        if (normalise.isEmpty()) {
-            throw new IllegalArgumentException("L'identifiant ne peut pas etre vide");
-        }
-        this.valeur = normalise;
+        this.valeur = Optional.of(normalise)
+                .filter(v -> !v.isEmpty())
+                .orElseThrow(() -> new IllegalArgumentException("L'identifiant ne peut pas etre vide"));
     }
 
     public static EventId nouveau() {
@@ -24,13 +24,7 @@ public final class EventId {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof EventId other)) {
-            return false;
-        }
-        return valeur.equals(other.valeur);
+        return obj instanceof EventId other && valeur.equals(other.valeur);
     }
 
     @Override

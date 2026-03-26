@@ -2,22 +2,39 @@ package projet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.stream.Stream;
 
 public class CalendarManager {
+    @FunctionalInterface
+    private interface RegleConflit {
+        boolean applique(Event e1, Event e2);
+    }
+
     public List<Event> events;
+    private final Map<String, RegleConflit> reglesConflit;
 
     public CalendarManager() {
         this.events = new ArrayList<>();
+        this.reglesConflit = Map.of(
+                cle(TypeEvenement.RDV_PERSONNEL, TypeEvenement.RDV_PERSONNEL), this::conflitPonctuels,
+                cle(TypeEvenement.RDV_PERSONNEL, TypeEvenement.REUNION), this::conflitPonctuels,
+                cle(TypeEvenement.REUNION, TypeEvenement.RDV_PERSONNEL), this::conflitPonctuels,
+                cle(TypeEvenement.REUNION, TypeEvenement.REUNION), this::conflitPonctuels,
+                cle(TypeEvenement.PERIODIQUE, TypeEvenement.RDV_PERSONNEL), this::conflitPeriodiqueEtPonctuel,
+                cle(TypeEvenement.PERIODIQUE, TypeEvenement.REUNION), this::conflitPeriodiqueEtPonctuel,
+                cle(TypeEvenement.RDV_PERSONNEL, TypeEvenement.PERIODIQUE), this::conflitPonctuelEtPeriodique,
+                cle(TypeEvenement.REUNION, TypeEvenement.PERIODIQUE), this::conflitPonctuelEtPeriodique,
+                cle(TypeEvenement.PERIODIQUE, TypeEvenement.PERIODIQUE), this::conflitDeuxPeriodiques);
     }
 
-    public void ajouterEvent(String type, String title, String proprietaire, DateHeureEvenement dateDebut,
-            int dureeMinutes,
-            String lieu, String participants, int frequenceJours) {
-        Event e = new Event(EventId.nouveau(), new TypeEvenement(type), new TitreEvenement(title),
-                new ProprietaireEvenement(proprietaire), dateDebut, new DureeEvenement(dureeMinutes),
-                new LieuEvenement(lieu), new ParticipantsEvenement(participants), new FrequenceJours(frequenceJours));
+    public void ajouterEvent(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire,
+            DateHeureEvenement dateDebut, DureeEvenement dureeMinutes, LieuEvenement lieu,
+            ParticipantsEvenement participants, FrequenceJours frequenceJours) {
+        Event e = new Event(EventId.nouveau(), type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants,
+                frequenceJours);
         events.add(e);
     }
 
@@ -26,94 +43,65 @@ public class CalendarManager {
     }
 
     public List<Event> eventsDansPeriode(PeriodeEvenements periode) {
-        List<Event> result = new ArrayList<>();
-        for (Event e : events) {
-            if (e.type.estDansPeriode(e, periode.debut(), periode.fin())) {
-                result.add(e);
-            }
-        }
-        return result;
+        return events.stream().filter(e -> e.type.estDansPeriode(e, periode.debut(), periode.fin())).toList();
     }
 
     public boolean conflit(Event e1, Event e2) {
-        if (!e1.type.estPeriodique() && !e2.type.estPeriodique()) {
-            return chevauchement(e1.dateDebut.valeur(), e1.dureeMinutes.valeur(), e2.dateDebut.valeur(),
-                    e2.dureeMinutes.valeur());
-        }
+        return reglesConflit.get(cle(e1.type.valeur(), e2.type.valeur())).applique(e1, e2);
+    }
 
-        if (e1.type.estPeriodique() && e2.type.estPeriodique()) {
-            return conflitDeuxPeriodiques(e1, e2);
-        }
+    private boolean conflitPonctuels(Event e1, Event e2) {
+        return chevauchement(e1.dateDebut.valeur(), e1.dureeMinutes.valeur(), e2.dateDebut.valeur(),
+                e2.dureeMinutes.valeur());
+    }
 
-        Event periodique = e1.type.estPeriodique() ? e1 : e2;
-        Event ponctuel = e1.type.estPeriodique() ? e2 : e1;
+    private boolean conflitPonctuelEtPeriodique(Event ponctuel, Event periodique) {
         return conflitPeriodiqueEtPonctuel(periodique, ponctuel);
     }
 
     private boolean conflitPeriodiqueEtPonctuel(Event periodique, Event ponctuel) {
-        int frequence = periodique.frequenceJours.valeur();
-        if (frequence <= 0) {
-            return chevauchement(periodique.dateDebut.valeur(), periodique.dureeMinutes.valeur(),
-                    ponctuel.dateDebut.valeur(), ponctuel.dureeMinutes.valeur());
-        }
+        int frequence = Math.max(1, periodique.frequenceJours.valeur());
 
         LocalDateTime ponctuelDebut = ponctuel.dateDebut.valeur();
         LocalDateTime ponctuelFin = ponctuelDebut.plusMinutes(ponctuel.dureeMinutes.valeur());
         LocalDateTime occurrence = premiereOccurrenceProche(periodique, ponctuelDebut, frequence);
+        long limite = Math.max(1L,
+                ChronoUnit.DAYS.between(occurrence.toLocalDate(), ponctuelFin.toLocalDate()) / frequence + 2);
 
-        while (occurrence.isBefore(ponctuelFin)) {
-            if (chevauchement(occurrence, periodique.dureeMinutes.valeur(), ponctuelDebut,
-                    ponctuel.dureeMinutes.valeur())) {
-                return true;
-            }
-            occurrence = occurrence.plusDays(frequence);
-        }
-        return false;
+        return Stream.iterate(occurrence, d -> d.plusDays(frequence))
+                .limit(limite)
+                .anyMatch(o -> chevauchement(o, periodique.dureeMinutes.valeur(), ponctuelDebut,
+                        ponctuel.dureeMinutes.valeur()));
     }
 
     private boolean conflitDeuxPeriodiques(Event e1, Event e2) {
-        int f1 = e1.frequenceJours.valeur();
-        int f2 = e2.frequenceJours.valeur();
+        int f1 = Math.max(1, e1.frequenceJours.valeur());
+        int f2 = Math.max(1, e2.frequenceJours.valeur());
 
-        if (f1 <= 0 || f2 <= 0) {
-            if (f1 <= 0 && f2 <= 0) {
-                return chevauchement(e1.dateDebut.valeur(), e1.dureeMinutes.valeur(), e2.dateDebut.valeur(),
-                        e2.dureeMinutes.valeur());
-            }
-            return f1 <= 0 ? conflitPeriodiqueEtPonctuel(e2, e1) : conflitPeriodiqueEtPonctuel(e1, e2);
-        }
-
-        LocalDateTime debutFenetre = e1.dateDebut.valeur().isAfter(e2.dateDebut.valeur())
-                ? e1.dateDebut.valeur()
-                : e2.dateDebut.valeur();
+        LocalDateTime debutFenetre = Stream.of(e1.dateDebut.valeur(), e2.dateDebut.valeur())
+                .max(LocalDateTime::compareTo)
+                .orElse(e1.dateDebut.valeur());
         long lcmJours = lcm(f1, f2);
         LocalDateTime finFenetre = debutFenetre.plusDays(lcmJours + 1);
 
         LocalDateTime occ1 = premiereOccurrenceProche(e1, debutFenetre, f1);
-        while (occ1.isBefore(finFenetre)) {
-            LocalDateTime occ2 = premiereOccurrenceProche(e2, occ1, f2);
-            if (chevauchement(occ1, e1.dureeMinutes.valeur(), occ2, e2.dureeMinutes.valeur())) {
-                return true;
-            }
+        long limite = Math.max(1L, ChronoUnit.DAYS.between(occ1.toLocalDate(), finFenetre.toLocalDate()) / f1 + 2);
 
-            LocalDateTime occ2Precedente = occ2.minusDays(f2);
-            if (!occ2Precedente.isBefore(e2.dateDebut.valeur())
-                    && chevauchement(occ1, e1.dureeMinutes.valeur(), occ2Precedente, e2.dureeMinutes.valeur())) {
-                return true;
-            }
-            occ1 = occ1.plusDays(f1);
-        }
-        return false;
+        return Stream.iterate(occ1, d -> d.plusDays(f1))
+                .limit(limite)
+                .anyMatch(occurrence1 -> {
+                    LocalDateTime occ2 = premiereOccurrenceProche(e2, occurrence1, f2);
+                    return Stream.of(occ2, occ2.minusDays(f2))
+                            .filter(o -> !o.isBefore(e2.dateDebut.valeur()))
+                            .anyMatch(o -> chevauchement(occurrence1, e1.dureeMinutes.valeur(), o,
+                                    e2.dureeMinutes.valeur()));
+                });
     }
 
     private LocalDateTime premiereOccurrenceProche(Event event, LocalDateTime reference, int frequence) {
         LocalDateTime debut = event.dateDebut.valeur();
-        if (debut.isAfter(reference) || frequence <= 0) {
-            return debut;
-        }
-
         long jours = ChronoUnit.DAYS.between(debut.toLocalDate(), reference.toLocalDate());
-        long cycles = Math.max(0, (jours / frequence) - 1);
+        long cycles = Math.max(0, (jours / Math.max(1, frequence)) - 1);
         return debut.plusDays(cycles * frequence);
     }
 
@@ -135,7 +123,11 @@ public class CalendarManager {
             x = y;
             y = tmp;
         }
-        return x == 0 ? 1 : x;
+        return Math.max(1, x);
+    }
+
+    private String cle(String type1, String type2) {
+        return type1 + "|" + type2;
     }
 
     public void afficherEvenements() {

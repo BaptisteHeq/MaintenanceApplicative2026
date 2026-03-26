@@ -1,13 +1,14 @@
 package projet;
 
+import java.util.Optional;
+
 public final class DureeEvenement {
     private final int minutes;
 
     public DureeEvenement(int minutes) {
-        if (minutes < 0) {
-            throw new IllegalArgumentException("La duree doit etre positive ou nulle");
-        }
-        this.minutes = minutes;
+        this.minutes = Optional.of(minutes)
+                .filter(m -> m >= 0)
+                .orElseThrow(() -> new IllegalArgumentException("La duree doit etre positive ou nulle"));
     }
 
     public int valeur() {
@@ -21,13 +22,7 @@ public final class DureeEvenement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof DureeEvenement that)) {
-            return false;
-        }
-        return minutes == that.minutes;
+        return o instanceof DureeEvenement that && minutes == that.minutes;
     }
 
     @Override

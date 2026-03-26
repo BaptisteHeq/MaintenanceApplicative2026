@@ -37,9 +37,11 @@ public class MyCalendarTest {
         Method method = Main.class.getDeclaredMethod("afficherListe", List.class);
         method.setAccessible(true);
 
-        Event e = new Event("RDV_PERSONNEL", "Dentiste", "Alice",
+        Event e = new Event(new TypeEvenement(TypeEvenement.RDV_PERSONNEL), new TitreEvenement("Dentiste"),
+                new ProprietaireEvenement("Alice"),
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
-                30, "", "", 0);
+                new DureeEvenement(30), new LieuEvenement(""), new ParticipantsEvenement(""),
+                new FrequenceJours(0));
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;

@@ -1,13 +1,14 @@
 package projet;
 
+import java.util.Optional;
+
 public final class FrequenceJours {
     private final int valeur;
 
     public FrequenceJours(int valeur) {
-        if (valeur < 0) {
-            throw new IllegalArgumentException("La frequence doit etre positive ou nulle");
-        }
-        this.valeur = valeur;
+        this.valeur = Optional.of(valeur)
+                .filter(v -> v >= 0)
+                .orElseThrow(() -> new IllegalArgumentException("La frequence doit etre positive ou nulle"));
     }
 
     public int valeur() {
@@ -21,13 +22,7 @@ public final class FrequenceJours {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof FrequenceJours that)) {
-            return false;
-        }
-        return valeur == that.valeur;
+        return o instanceof FrequenceJours that && valeur == that.valeur;
     }
 
     @Override

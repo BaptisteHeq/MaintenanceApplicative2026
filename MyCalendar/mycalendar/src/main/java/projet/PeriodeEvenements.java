@@ -1,6 +1,7 @@
 package projet;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public final class PeriodeEvenements {
     private final DateHeureEvenement debut;
@@ -9,9 +10,10 @@ public final class PeriodeEvenements {
     public PeriodeEvenements(DateHeureEvenement debut, DateHeureEvenement fin) {
         this.debut = Objects.requireNonNull(debut, "Le debut de periode est requis");
         this.fin = Objects.requireNonNull(fin, "La fin de periode est requise");
-        if (debut.isAfter(fin)) {
-            throw new IllegalArgumentException("Le debut de periode doit etre avant ou egal a la fin");
-        }
+        Optional.of(this.debut)
+                .filter(d -> !d.isAfter(this.fin))
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Le debut de periode doit etre avant ou egal a la fin"));
     }
 
     public DateHeureEvenement debut() {
@@ -24,13 +26,7 @@ public final class PeriodeEvenements {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof PeriodeEvenements other)) {
-            return false;
-        }
-        return debut.equals(other.debut) && fin.equals(other.fin);
+        return obj instanceof PeriodeEvenements other && debut.equals(other.debut) && fin.equals(other.fin);
     }
 
     @Override

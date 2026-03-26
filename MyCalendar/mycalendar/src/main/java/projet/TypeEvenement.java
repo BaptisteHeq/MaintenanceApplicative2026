@@ -55,13 +55,7 @@ public final class TypeEvenement {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof TypeEvenement other)) {
-            return false;
-        }
-        return valeur.equals(other.valeur);
+        return obj instanceof TypeEvenement other && valeur.equals(other.valeur);
     }
 
     @Override

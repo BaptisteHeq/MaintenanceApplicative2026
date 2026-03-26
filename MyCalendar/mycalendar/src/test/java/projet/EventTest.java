@@ -14,14 +14,14 @@ class EventTest {
     @Test
     void descriptionRdvPersonnel() {
         DateHeureEvenement date = new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 30));
-        Event event = new Event("RDV_PERSONNEL", "Dentiste", "Alice", date, 45, "", "", 0);
+        Event event = event("RDV_PERSONNEL", "Dentiste", "Alice", date, 45, "", "", 0);
 
         assertEquals("RDV : Dentiste à 2026-03-20T10:30", event.description());
     }
 
     @Test
     void descriptionReunion() {
-        Event event = new Event("REUNION", "Sprint", "Alice",
+        Event event = event("REUNION", "Sprint", "Alice",
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 9, 0)),
                 60, "Salle 2", "Alice, Bob", 0);
 
@@ -30,7 +30,7 @@ class EventTest {
 
     @Test
     void descriptionPeriodique() {
-        Event event = new Event("PERIODIQUE", "Sport", "Alice",
+        Event event = event("PERIODIQUE", "Sport", "Alice",
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 7, 0)),
                 0, "", "", 2);
 
@@ -39,7 +39,7 @@ class EventTest {
 
     @Test
     void typeInconnuEstRefuse() {
-        assertThrows(IllegalArgumentException.class, () -> new Event("AUTRE", "Test", "Alice",
+        assertThrows(IllegalArgumentException.class, () -> event("AUTRE", "Test", "Alice",
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 7, 0)), 0, "", "", 0));
     }
 
@@ -69,14 +69,21 @@ class EventTest {
 
     @Test
     void constructeurGenereDesIdentifiantsDifferents() {
-        Event e1 = new Event("RDV_PERSONNEL", "Dentiste", "Alice",
+        Event e1 = event("RDV_PERSONNEL", "Dentiste", "Alice",
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 30)), 45,
                 "", "", 0);
-        Event e2 = new Event("RDV_PERSONNEL", "Dentiste", "Alice",
+        Event e2 = event("RDV_PERSONNEL", "Dentiste", "Alice",
                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 30)), 45,
                 "", "", 0);
 
         assertNotEquals(e1.id, e2.id);
+    }
+
+    private Event event(String type, String titre, String proprietaire, DateHeureEvenement debut,
+            int dureeMinutes, String lieu, String participants, int frequenceJours) {
+        return new Event(new TypeEvenement(type), new TitreEvenement(titre), new ProprietaireEvenement(proprietaire),
+                debut, new DureeEvenement(dureeMinutes), new LieuEvenement(lieu),
+                new ParticipantsEvenement(participants), new FrequenceJours(frequenceJours));
     }
 
 }
