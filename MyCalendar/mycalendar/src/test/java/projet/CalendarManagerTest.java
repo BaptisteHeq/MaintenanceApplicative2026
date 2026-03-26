@@ -132,7 +132,7 @@ class CalendarManagerTest {
         }
 
         @Test
-        void conflitRetourneFalseSiPeriodique() {
+        void conflitRetourneTrueSiPeriodiqueChevaucheUnPonctuel() {
                 CalendarManager manager = new CalendarManager();
 
                 Event e1 = new Event("PERIODIQUE", "A", "Alice",
@@ -142,11 +142,11 @@ class CalendarManagerTest {
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
                                 30, "Salle", "Bob", 0);
 
-                assertFalse(manager.conflit(e1, e2));
+                assertTrue(manager.conflit(e1, e2));
         }
 
         @Test
-        void conflitRetourneFalseSiDeuxiemeEstPeriodique() {
+        void conflitRetourneTrueSiPonctuelChevaucheUnPeriodique() {
                 CalendarManager manager = new CalendarManager();
 
                 Event e1 = new Event("REUNION", "A", "Alice",
@@ -155,6 +155,20 @@ class CalendarManagerTest {
                 Event e2 = new Event("PERIODIQUE", "B", "Bob",
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
                                 30, "", "", 1);
+
+                assertTrue(manager.conflit(e1, e2));
+        }
+
+        @Test
+        void conflitRetourneFalseSiPeriodiqueNeChevauchePasLePonctuel() {
+                CalendarManager manager = new CalendarManager();
+
+                Event e1 = new Event("PERIODIQUE", "A", "Alice",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 6, 0)),
+                                30, "", "", 1);
+                Event e2 = new Event("REUNION", "B", "Bob",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
+                                30, "Salle", "Bob", 0);
 
                 assertFalse(manager.conflit(e1, e2));
         }
