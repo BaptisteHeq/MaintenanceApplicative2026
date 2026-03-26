@@ -1,6 +1,7 @@
 package projet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -36,5 +37,12 @@ public class DureeEvenementTest {
     void toStringRetourneLaValeur() {
         DureeEvenement duree = new DureeEvenement(30);
         assertEquals("30", duree.toString());
+    }
+
+    @Test
+    void inegaliteEtTypeDifferent() {
+        DureeEvenement duree = new DureeEvenement(30);
+        assertNotEquals(duree, new DureeEvenement(31));
+        assertNotEquals(duree, "30");
     }
 }

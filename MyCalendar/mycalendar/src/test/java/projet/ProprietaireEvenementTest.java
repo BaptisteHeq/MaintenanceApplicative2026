@@ -1,6 +1,7 @@
 package projet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -41,5 +42,12 @@ public class ProprietaireEvenementTest {
     void toStringRetourneLaValeur() {
         ProprietaireEvenement proprietaire = new ProprietaireEvenement("Alice");
         assertEquals("Alice", proprietaire.toString());
+    }
+
+    @Test
+    void inegaliteEtTypeDifferent() {
+        ProprietaireEvenement proprietaire = new ProprietaireEvenement("Alice");
+        assertNotEquals(proprietaire, new ProprietaireEvenement("Bob"));
+        assertNotEquals(proprietaire, "Alice");
     }
 }

@@ -43,4 +43,12 @@ class LieuEvenementTest {
 
         assertEquals("Amphi", lieu.toString());
     }
+
+    @Test
+    void equalsReflexifEtTypeDifferent() {
+        LieuEvenement lieu = new LieuEvenement("Salle A");
+
+        assertEquals(lieu, lieu);
+        assertNotEquals(lieu, "Salle A");
+    }
 }

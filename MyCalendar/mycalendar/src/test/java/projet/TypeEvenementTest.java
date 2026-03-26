@@ -2,6 +2,7 @@ package projet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,5 +47,13 @@ class TypeEvenementTest {
         TypeEvenement type = new TypeEvenement(TypeEvenement.REUNION);
 
         assertEquals(TypeEvenement.REUNION, type.toString());
+    }
+
+    @Test
+    void inegaliteEtTypeDifferent() {
+        TypeEvenement type = new TypeEvenement(TypeEvenement.REUNION);
+
+        assertNotEquals(type, new TypeEvenement(TypeEvenement.RDV_PERSONNEL));
+        assertNotEquals(type, "REUNION");
     }
 }

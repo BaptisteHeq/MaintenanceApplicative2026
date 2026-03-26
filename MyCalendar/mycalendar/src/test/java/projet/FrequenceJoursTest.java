@@ -1,6 +1,7 @@
 package projet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -36,5 +37,12 @@ public class FrequenceJoursTest {
     void toStringRetourneLaValeur() {
         FrequenceJours frequence = new FrequenceJours(7);
         assertEquals("7", frequence.toString());
+    }
+
+    @Test
+    void inegaliteEtTypeDifferent() {
+        FrequenceJours frequence = new FrequenceJours(7);
+        assertNotEquals(frequence, new FrequenceJours(8));
+        assertNotEquals(frequence, "7");
     }
 }

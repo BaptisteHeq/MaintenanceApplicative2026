@@ -43,4 +43,12 @@ class ParticipantsEvenementTest {
 
         assertEquals("Alice, Bob", participants.toString());
     }
+
+    @Test
+    void equalsReflexifEtTypeDifferent() {
+        ParticipantsEvenement participants = new ParticipantsEvenement("Alice, Bob");
+
+        assertEquals(participants, participants);
+        assertNotEquals(participants, "Alice, Bob");
+    }
 }
