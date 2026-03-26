@@ -3,7 +3,7 @@ package projet;
 import java.time.LocalDateTime;
 
 public class Event {
-    public String type; // "RDV_PERSONNEL", "REUNION", "PERIODIQUE"
+    public TypeEvenement type;
     public TitreEvenement title;
     public ProprietaireEvenement proprietaire;
     public LocalDateTime dateDebut;
@@ -14,42 +14,65 @@ public class Event {
 
     public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
             String lieu, String participants, int frequenceJours) {
-        this(type, new TitreEvenement(title), new ProprietaireEvenement(proprietaire), dateDebut,
+        this(new TypeEvenement(type), new TitreEvenement(title), new ProprietaireEvenement(proprietaire), dateDebut,
                 new DureeEvenement(dureeMinutes), new LieuEvenement(lieu),
-            new ParticipantsEvenement(participants),
+                new ParticipantsEvenement(participants),
                 new FrequenceJours(frequenceJours));
     }
 
     public Event(String type, TitreEvenement title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
             String lieu, String participants, int frequenceJours) {
-        this(type, title, new ProprietaireEvenement(proprietaire), dateDebut, new DureeEvenement(dureeMinutes),
-            new LieuEvenement(lieu), new ParticipantsEvenement(participants),
+        this(new TypeEvenement(type), title, new ProprietaireEvenement(proprietaire), dateDebut,
+                new DureeEvenement(dureeMinutes),
+                new LieuEvenement(lieu), new ParticipantsEvenement(participants),
                 new FrequenceJours(frequenceJours));
     }
 
     public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, DureeEvenement dureeMinutes,
             String lieu, String participants, int frequenceJours) {
-        this(type, new TitreEvenement(title), new ProprietaireEvenement(proprietaire), dateDebut, dureeMinutes,
-            new LieuEvenement(lieu), new ParticipantsEvenement(participants),
+        this(new TypeEvenement(type), new TitreEvenement(title), new ProprietaireEvenement(proprietaire), dateDebut,
+                dureeMinutes,
+                new LieuEvenement(lieu), new ParticipantsEvenement(participants),
                 new FrequenceJours(frequenceJours));
     }
 
     public Event(String type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
             DureeEvenement dureeMinutes,
             String lieu, String participants, FrequenceJours frequenceJours) {
-        this(type, title, proprietaire, dateDebut, dureeMinutes, new LieuEvenement(lieu),
-            new ParticipantsEvenement(participants),
+        this(new TypeEvenement(type), title, proprietaire, dateDebut, dureeMinutes, new LieuEvenement(lieu),
+                new ParticipantsEvenement(participants),
                 frequenceJours);
     }
 
-        public Event(String type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
+    public Event(String type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
+            DureeEvenement dureeMinutes,
+            LieuEvenement lieu, String participants, FrequenceJours frequenceJours) {
+        this(new TypeEvenement(type), title, proprietaire, dateDebut, dureeMinutes, lieu,
+                new ParticipantsEvenement(participants), frequenceJours);
+    }
+
+    public Event(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
+            DureeEvenement dureeMinutes,
+            String lieu, String participants, FrequenceJours frequenceJours) {
+        this(type, title, proprietaire, dateDebut, dureeMinutes, new LieuEvenement(lieu),
+                new ParticipantsEvenement(participants), frequenceJours);
+    }
+
+    public Event(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
             DureeEvenement dureeMinutes,
             LieuEvenement lieu, String participants, FrequenceJours frequenceJours) {
         this(type, title, proprietaire, dateDebut, dureeMinutes, lieu, new ParticipantsEvenement(participants),
-            frequenceJours);
-        }
+                frequenceJours);
+    }
 
     public Event(String type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
+            DureeEvenement dureeMinutes,
+            LieuEvenement lieu, ParticipantsEvenement participants, FrequenceJours frequenceJours) {
+        this(new TypeEvenement(type), title, proprietaire, dateDebut, dureeMinutes, lieu, participants,
+                frequenceJours);
+    }
+
+    public Event(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
             DureeEvenement dureeMinutes,
             LieuEvenement lieu, ParticipantsEvenement participants, FrequenceJours frequenceJours) {
         this.type = type;
@@ -64,11 +87,11 @@ public class Event {
 
     public String description() {
         String desc = "";
-        if (type.equals("RDV_PERSONNEL")) {
+        if (TypeEvenement.RDV_PERSONNEL.equals(type.valeur())) {
             desc = "RDV : " + title + " à " + dateDebut.toString();
-        } else if (type.equals("REUNION")) {
+        } else if (TypeEvenement.REUNION.equals(type.valeur())) {
             desc = "Réunion : " + title + " à " + lieu + " avec " + participants;
-        } else if (type.equals("PERIODIQUE")) {
+        } else if (TypeEvenement.PERIODIQUE.equals(type.valeur())) {
             desc = "Événement périodique : " + title + " tous les " + frequenceJours.valeur() + " jours";
         }
         return desc;

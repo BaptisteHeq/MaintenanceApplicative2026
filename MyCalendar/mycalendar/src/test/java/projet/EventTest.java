@@ -1,6 +1,7 @@
 package projet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 
@@ -33,11 +34,9 @@ class EventTest {
     }
 
     @Test
-    void descriptionTypeInconnuRetourneVide() {
-        Event event = new Event("AUTRE", "Test", "Alice", LocalDateTime.of(2026, 3, 20, 7, 0),
-                0, "", "", 0);
-
-        assertEquals("", event.description());
+    void typeInconnuEstRefuse() {
+        assertThrows(IllegalArgumentException.class, () -> new Event("AUTRE", "Test", "Alice",
+                LocalDateTime.of(2026, 3, 20, 7, 0), 0, "", "", 0));
     }
 
 }
