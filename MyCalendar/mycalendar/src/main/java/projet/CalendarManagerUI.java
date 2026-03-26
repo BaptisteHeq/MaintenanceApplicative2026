@@ -5,7 +5,9 @@ import java.awt.GridLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -23,8 +26,12 @@ import javax.swing.JTable;
 
 public final class CalendarManagerUI {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final String ACTION_CONNEXION = "Se connecter";
+    private static final String ACTION_CREER_COMPTE = "Creer un compte";
+    private static final String ACTION_ANNULER = "Annuler";
 
     private final CalendarManager manager;
+    private final Map<String, String> comptes;
 
     private final JFrame frame;
     private final JComboBox<String> typeBox;
@@ -37,9 +44,13 @@ public final class CalendarManagerUI {
     private final JTextField frequencyField;
     private final JTextField deleteIdField;
     private final DefaultTableModel tableModel;
+    private String utilisateurConnecte;
 
     private CalendarManagerUI() {
         this.manager = new CalendarManager();
+        this.comptes = new HashMap<>();
+        this.comptes.put("Roger", "Chat");
+        this.comptes.put("Pierre", "KiRouhl");
         this.frame = new JFrame("MyCalendar - UI minimale");
 
         this.typeBox = new JComboBox<>(new String[] {
@@ -47,7 +58,7 @@ public final class CalendarManagerUI {
                 TypeEvenement.REUNION,
                 TypeEvenement.PERIODIQUE
         });
-        this.ownerField = new JTextField("Alice");
+        this.ownerField = new JTextField();
         this.titleField = new JTextField();
         this.dateField = new JTextField("2026-03-20 10:00");
         this.durationField = new JTextField("30");
@@ -73,6 +84,10 @@ public final class CalendarManagerUI {
     }
 
     private void show() {
+        if (!demanderConnexion()) {
+            frame.dispose();
+            return;
+        }
         frame.setVisible(true);
         refreshTable();
     }
@@ -108,9 +123,13 @@ public final class CalendarManagerUI {
         JButton refreshButton = new JButton("Rafraichir");
         refreshButton.addActionListener(e -> refreshTable());
 
+        JButton logoutButton = new JButton("Se deconnecter");
+        logoutButton.addActionListener(e -> deconnecter());
+
         JPanel actionsPanel = new JPanel(new GridLayout(1, 0, 8, 8));
         actionsPanel.add(addButton);
         actionsPanel.add(refreshButton);
+        actionsPanel.add(logoutButton);
 
         JPanel topPanel = new JPanel(new BorderLayout(8, 8));
         topPanel.add(formPanel, BorderLayout.CENTER);
@@ -140,7 +159,7 @@ public final class CalendarManagerUI {
             manager.ajouterEvent(
                     new TypeEvenement(type),
                     new TitreEvenement(titleField.getText().trim()),
-                    new ProprietaireEvenement(ownerField.getText().trim()),
+                    new ProprietaireEvenement(utilisateurConnecte),
                     new DateHeureEvenement(date),
                     new DureeEvenement(parseIntOrDefault(durationField.getText(), 0)),
                     new LieuEvenement(locationField.getText().trim()),
@@ -192,6 +211,118 @@ public final class CalendarManagerUI {
         locationField.setText("");
         participantsField.setText("");
         deleteIdField.setText("");
+    }
+
+    private boolean demanderConnexion() {
+        JTextField loginField = new JTextField();
+        JPasswordField passwordField = new JPasswordField();
+        JPanel panel = new JPanel(new GridLayout(0, 1, 6, 6));
+        panel.add(new JLabel("Utilisateur"));
+        panel.add(loginField);
+        panel.add(new JLabel("Mot de passe"));
+        panel.add(passwordField);
+        Object[] options = { ACTION_CONNEXION, ACTION_CREER_COMPTE, ACTION_ANNULER };
+
+        while (true) {
+            int result = JOptionPane.showOptionDialog(
+                    frame,
+                    panel,
+                    "Connexion MyCalendar",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    ACTION_CONNEXION);
+
+            if (result == 2 || result == JOptionPane.CLOSED_OPTION) {
+                return false;
+            }
+
+            if (result == 1) {
+                creerCompte();
+                continue;
+            }
+
+            String login = loginField.getText().trim();
+            String motDePasse = new String(passwordField.getPassword());
+            String attendu = comptes.get(login);
+            if (attendu != null && attendu.equals(motDePasse)) {
+                utilisateurConnecte = login;
+                ownerField.setText(login);
+                ownerField.setEditable(false);
+                frame.setTitle("MyCalendar - UI minimale - Connecte: " + login);
+                return true;
+            }
+
+            JOptionPane.showMessageDialog(frame,
+                    "Identifiants invalides.",
+                    "Connexion refusee",
+                    JOptionPane.ERROR_MESSAGE);
+            passwordField.setText("");
+        }
+    }
+
+    private void creerCompte() {
+        JTextField loginField = new JTextField();
+        JPasswordField passwordField = new JPasswordField();
+        JPasswordField confirmationField = new JPasswordField();
+        JPanel panel = new JPanel(new GridLayout(0, 1, 6, 6));
+        panel.add(new JLabel("Nouveau nom d'utilisateur"));
+        panel.add(loginField);
+        panel.add(new JLabel("Nouveau mot de passe"));
+        panel.add(passwordField);
+        panel.add(new JLabel("Confirmation mot de passe"));
+        panel.add(confirmationField);
+
+        int result = JOptionPane.showConfirmDialog(
+                frame,
+                panel,
+                "Creer un compte",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        String login = loginField.getText().trim();
+        String motDePasse = new String(passwordField.getPassword());
+        String confirmation = new String(confirmationField.getPassword());
+
+        if (login.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Le nom d'utilisateur ne peut pas etre vide.", "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (motDePasse.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Le mot de passe ne peut pas etre vide.", "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (comptes.containsKey(login)) {
+            JOptionPane.showMessageDialog(frame, "Ce nom d'utilisateur existe deja.", "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!motDePasse.equals(confirmation)) {
+            JOptionPane.showMessageDialog(frame, "Les mots de passe ne correspondent pas.", "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        comptes.put(login, motDePasse);
+        JOptionPane.showMessageDialog(frame, "Compte cree. Vous pouvez maintenant vous connecter.", "Succes",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void deconnecter() {
+        if (demanderConnexion()) {
+            clearAfterAdd();
+            refreshTable();
+        }
     }
 
     private int parseIntOrDefault(String value, int defaultValue) {
