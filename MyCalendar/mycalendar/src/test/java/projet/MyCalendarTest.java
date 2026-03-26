@@ -74,9 +74,11 @@ public class MyCalendarTest {
                 "4", // ajouter périodique
                 "Sport",
                 "2026", "3", "21", "7", "0", "2",
+                "5", // suppression par id
+                "inconnu",
                 "1", // menu visualisation
                 "1", // afficher tous
-                "5", // déconnexion
+                "6", // déconnexion
                 "n" // continuer ? non
         ) + "\n";
 
@@ -85,6 +87,7 @@ public class MyCalendarTest {
 
         String output = out.toString(StandardCharsets.UTF_8);
         assertTrue(output.contains("Événement ajouté."));
+        assertTrue(output.contains("Aucun événement trouvé avec cet identifiant."));
         assertTrue(output.contains("Déconnexion"));
     }
 
@@ -103,7 +106,7 @@ public class MyCalendarTest {
                 "1", // visualiser
                 "4", // jour
                 "2026", "3", "20",
-                "5", // déconnexion
+                "6", // déconnexion
                 "n" // continuer ? non
         ) + "\n";
 

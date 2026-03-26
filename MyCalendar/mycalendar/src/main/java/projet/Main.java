@@ -93,7 +93,8 @@ public class Main {
                 System.out.println("2 - Ajouter un rendez-vous perso");
                 System.out.println("3 - Ajouter une réunion");
                 System.out.println("4 - Ajouter un évènement périodique");
-                System.out.println("5 - Se déconnecter");
+                System.out.println("5 - Supprimer un événement par identifiant");
+                System.out.println("6 - Se déconnecter");
                 System.out.print("Votre choix : ");
 
                 String choix = scanner.nextLine();
@@ -219,7 +220,7 @@ public class Main {
                         System.out.println("Événement ajouté.");
                         break;
 
-                        case "4":
+                    case "4":
                         // Ajout simplifié d'une réunion
                         System.out.print("Titre de l'événement : ");
                         String titre3 = scanner.nextLine();
@@ -241,6 +242,21 @@ public class Main {
                                 "", "", frequence);
 
                         System.out.println("Événement ajouté.");
+                        break;
+
+                    case "5":
+                        System.out.print("Identifiant de l'événement à supprimer : ");
+                        String idASupprimer = scanner.nextLine();
+                        try {
+                            boolean supprime = calendar.supprimerEvent(new EventId(idASupprimer));
+                            if (supprime) {
+                                System.out.println("Événement supprimé.");
+                            } else {
+                                System.out.println("Aucun événement trouvé avec cet identifiant.");
+                            }
+                        } catch (IllegalArgumentException | NullPointerException e) {
+                            System.out.println("Identifiant invalide.");
+                        }
                         break;
 
                     default:
