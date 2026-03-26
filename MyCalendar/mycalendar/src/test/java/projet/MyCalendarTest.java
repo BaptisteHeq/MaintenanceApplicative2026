@@ -51,7 +51,8 @@ public class MyCalendarTest {
 
         String output = out.toString();
         assertTrue(output.contains("Événements trouvés :"));
-        assertTrue(output.contains("- RDV : Dentiste à 2026-03-20T10:00"));
+        assertTrue(output.contains("- ID="));
+        assertTrue(output.contains("RDV : Dentiste à 2026-03-20T10:00"));
     }
 
     @Test
@@ -88,6 +89,7 @@ public class MyCalendarTest {
         String output = out.toString(StandardCharsets.UTF_8);
         assertTrue(output.contains("Événement ajouté."));
         assertTrue(output.contains("Aucun événement trouvé avec cet identifiant."));
+        assertTrue(output.contains("ID="));
         assertTrue(output.contains("Déconnexion"));
     }
 

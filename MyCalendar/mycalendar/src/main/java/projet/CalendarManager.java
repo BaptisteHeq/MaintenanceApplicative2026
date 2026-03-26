@@ -39,7 +39,7 @@ public class CalendarManager {
 
     public void afficherEvenements() {
         for (Event e : events) {
-            System.out.println(e.description());
+            System.out.println("ID=" + e.id + " | " + e.description());
         }
     }
 

@@ -161,6 +161,7 @@ class CalendarManagerTest {
                 }
 
                 String output = out.toString();
+                assertTrue(output.contains("ID="));
                 assertTrue(output.contains("RDV : Dentiste à 2026-03-20T10:00"));
         }
 

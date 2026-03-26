@@ -202,13 +202,12 @@ public class Main {
                         int duree2 = Integer.parseInt(scanner.nextLine());
                         System.out.println("Lieu :");
                         String lieu = scanner.nextLine();
-                        
+
                         String participants = utilisateur;
-                        
+
                         boolean encore = true;
                         System.out.println("Ajouter un participant ? (oui / non)");
-                        while (scanner.nextLine().equals("oui"))
-                        {
+                        while (scanner.nextLine().equals("oui")) {
                             System.out.print("Participants : " + participants);
                             participants += ", " + scanner.nextLine();
                         }
@@ -275,7 +274,7 @@ public class Main {
         } else {
             System.out.println("Événements trouvés : ");
             for (Event e : evenements) {
-                System.out.println("- " + e.description());
+                System.out.println("- ID=" + e.id + " | " + e.description());
             }
         }
     }
