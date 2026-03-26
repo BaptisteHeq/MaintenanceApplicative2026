@@ -58,7 +58,7 @@ class EventTest {
         assertEquals(type, event.type);
         assertEquals(titre, event.title);
         assertEquals(proprietaire, event.proprietaire);
-        assertEquals(debut, event.dateDebut);
+        assertEquals(new DateHeureEvenement(debut), event.dateDebut);
         assertEquals(duree, event.dureeMinutes);
         assertEquals(lieu, event.lieu);
         assertEquals(participants, event.participants);

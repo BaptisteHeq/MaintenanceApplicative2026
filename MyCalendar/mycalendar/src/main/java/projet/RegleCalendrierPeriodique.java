@@ -1,11 +1,9 @@
 package projet;
 
-import java.time.LocalDateTime;
-
 final class RegleCalendrierPeriodique implements RegleCalendrierEvenement {
     @Override
-    public boolean estDansPeriode(Event event, LocalDateTime debut, LocalDateTime fin) {
-        LocalDateTime occurrence = event.dateDebut;
+    public boolean estDansPeriode(Event event, DateHeureEvenement debut, DateHeureEvenement fin) {
+        DateHeureEvenement occurrence = event.dateDebut;
         while (occurrence.isBefore(fin)) {
             if (!occurrence.isBefore(debut)) {
                 return true;

@@ -1,9 +1,7 @@
 package projet;
 
-import java.time.LocalDateTime;
-
 interface RegleCalendrierEvenement {
-    boolean estDansPeriode(Event event, LocalDateTime debut, LocalDateTime fin);
+    boolean estDansPeriode(Event event, DateHeureEvenement debut, DateHeureEvenement fin);
 
     boolean participeAuxConflits();
 }

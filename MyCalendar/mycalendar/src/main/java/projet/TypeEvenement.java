@@ -1,6 +1,5 @@
 package projet;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Map;
@@ -46,7 +45,7 @@ public final class TypeEvenement {
         return descriptionEvenement.decrire(event);
     }
 
-    public boolean estDansPeriode(Event event, LocalDateTime debut, LocalDateTime fin) {
+    public boolean estDansPeriode(Event event, DateHeureEvenement debut, DateHeureEvenement fin) {
         return regleCalendrierEvenement.estDansPeriode(event, debut, fin);
     }
 

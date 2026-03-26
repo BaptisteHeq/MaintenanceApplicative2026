@@ -13,11 +13,24 @@ public class CalendarManager {
 
     public void ajouterEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
             String lieu, String participants, int frequenceJours) {
-        Event e = new Event(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
+        ajouterEvent(type, title, proprietaire, new DateHeureEvenement(dateDebut), dureeMinutes, lieu, participants,
+                frequenceJours);
+    }
+
+    public void ajouterEvent(String type, String title, String proprietaire, DateHeureEvenement dateDebut,
+            int dureeMinutes,
+            String lieu, String participants, int frequenceJours) {
+        Event e = new Event(EventId.nouveau(), new TypeEvenement(type), new TitreEvenement(title),
+                new ProprietaireEvenement(proprietaire), dateDebut, new DureeEvenement(dureeMinutes),
+                new LieuEvenement(lieu), new ParticipantsEvenement(participants), new FrequenceJours(frequenceJours));
         events.add(e);
     }
 
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
+        return eventsDansPeriode(new DateHeureEvenement(debut), new DateHeureEvenement(fin));
+    }
+
+    public List<Event> eventsDansPeriode(DateHeureEvenement debut, DateHeureEvenement fin) {
         List<Event> result = new ArrayList<>();
         for (Event e : events) {
             if (e.type.estDansPeriode(e, debut, fin)) {
@@ -28,8 +41,8 @@ public class CalendarManager {
     }
 
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes.valeur());
-        LocalDateTime fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes.valeur());
+        DateHeureEvenement fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes.valeur());
+        DateHeureEvenement fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes.valeur());
 
         return e1.type.participeAuxConflits()
                 && e2.type.participeAuxConflits()
