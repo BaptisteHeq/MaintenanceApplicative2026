@@ -20,16 +20,7 @@ public class CalendarManager {
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
         List<Event> result = new ArrayList<>();
         for (Event e : events) {
-            if (e.type.estPeriodique()) {
-                LocalDateTime temp = e.dateDebut;
-                while (temp.isBefore(fin)) {
-                    if (!temp.isBefore(debut)) {
-                        result.add(e);
-                        break;
-                    }
-                    temp = temp.plusDays(e.frequenceJours.valeur());
-                }
-            } else if (!e.dateDebut.isBefore(debut) && !e.dateDebut.isAfter(fin)) {
+            if (e.type.estDansPeriode(e, debut, fin)) {
                 result.add(e);
             }
         }
@@ -40,14 +31,10 @@ public class CalendarManager {
         LocalDateTime fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes.valeur());
         LocalDateTime fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes.valeur());
 
-        if (e1.type.estPeriodique() || e2.type.estPeriodique()) {
-            return false; // Simplification abusive
-        }
-
-        if (e1.dateDebut.isBefore(fin2) && fin1.isAfter(e2.dateDebut)) {
-            return true;
-        }
-        return false;
+        return e1.type.participeAuxConflits()
+                && e2.type.participeAuxConflits()
+                && e1.dateDebut.isBefore(fin2)
+                && fin1.isAfter(e2.dateDebut);
     }
 
     public void afficherEvenements() {
