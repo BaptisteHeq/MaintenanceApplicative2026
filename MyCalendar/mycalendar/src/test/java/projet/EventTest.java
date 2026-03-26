@@ -1,6 +1,8 @@
 package projet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
@@ -52,6 +54,7 @@ class EventTest {
 
         Event event = new Event(type, titre, proprietaire, debut, duree, lieu, participants, frequence);
 
+        assertNotNull(event.id);
         assertEquals(type, event.type);
         assertEquals(titre, event.title);
         assertEquals(proprietaire, event.proprietaire);
@@ -60,6 +63,16 @@ class EventTest {
         assertEquals(lieu, event.lieu);
         assertEquals(participants, event.participants);
         assertEquals(frequence, event.frequenceJours);
+    }
+
+    @Test
+    void constructeurGenereDesIdentifiantsDifferents() {
+        Event e1 = new Event("RDV_PERSONNEL", "Dentiste", "Alice", LocalDateTime.of(2026, 3, 20, 10, 30), 45,
+                "", "", 0);
+        Event e2 = new Event("RDV_PERSONNEL", "Dentiste", "Alice", LocalDateTime.of(2026, 3, 20, 10, 30), 45,
+                "", "", 0);
+
+        assertNotEquals(e1.id, e2.id);
     }
 
 }

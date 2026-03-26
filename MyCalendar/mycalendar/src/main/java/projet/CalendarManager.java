@@ -42,4 +42,8 @@ public class CalendarManager {
             System.out.println(e.description());
         }
     }
+
+    public boolean supprimerEvent(EventId id) {
+        return events.removeIf(event -> event.id.equals(id));
+    }
 }

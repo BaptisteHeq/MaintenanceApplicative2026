@@ -15,23 +15,23 @@ public final class TypeEvenement {
             REUNION, new DescriptionReunion(),
             PERIODIQUE, new DescriptionPeriodique());
 
-        private static final RegleCalendrierEvenement REGLE_PONCTUELLE = new RegleCalendrierPonctuelle();
+    private static final RegleCalendrierEvenement REGLE_PONCTUELLE = new RegleCalendrierPonctuelle();
 
-        private static final Map<String, RegleCalendrierEvenement> REGLES_CALENDRIER = Map.of(
+    private static final Map<String, RegleCalendrierEvenement> REGLES_CALENDRIER = Map.of(
             RDV_PERSONNEL, REGLE_PONCTUELLE,
             REUNION, REGLE_PONCTUELLE,
             PERIODIQUE, new RegleCalendrierPeriodique());
 
     private final String valeur;
     private final DescriptionEvenement descriptionEvenement;
-        private final RegleCalendrierEvenement regleCalendrierEvenement;
+    private final RegleCalendrierEvenement regleCalendrierEvenement;
 
     public TypeEvenement(String valeur) {
         this.valeur = Objects.requireNonNull(valeur, "Le type ne peut pas etre null");
         this.descriptionEvenement = Optional.ofNullable(DESCRIPTIONS.get(this.valeur))
                 .orElseThrow(() -> new IllegalArgumentException("Type d'evenement non supporte: " + valeur));
         this.regleCalendrierEvenement = Optional.ofNullable(REGLES_CALENDRIER.get(this.valeur))
-            .orElseThrow(() -> new IllegalArgumentException("Regle de calendrier absente pour: " + valeur));
+                .orElseThrow(() -> new IllegalArgumentException("Regle de calendrier absente pour: " + valeur));
     }
 
     public String valeur() {

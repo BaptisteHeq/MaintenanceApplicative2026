@@ -163,4 +163,30 @@ class CalendarManagerTest {
                 String output = out.toString();
                 assertTrue(output.contains("RDV : Dentiste à 2026-03-20T10:00"));
         }
+
+        @Test
+        void supprimerEventSupprimeLEvenementCible() {
+                CalendarManager manager = new CalendarManager();
+                manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
+                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+
+                EventId id = manager.events.get(0).id;
+
+                boolean supprime = manager.supprimerEvent(id);
+
+                assertTrue(supprime);
+                assertTrue(manager.events.isEmpty());
+        }
+
+        @Test
+        void supprimerEventRetourneFalseSiIdAbsent() {
+                CalendarManager manager = new CalendarManager();
+                manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
+                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+
+                boolean supprime = manager.supprimerEvent(new EventId("inconnu"));
+
+                assertFalse(supprime);
+                assertEquals(1, manager.events.size());
+        }
 }
