@@ -1,6 +1,5 @@
 package projet;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +10,6 @@ public class CalendarManager {
         this.events = new ArrayList<>();
     }
 
-    public void ajouterEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
-            String lieu, String participants, int frequenceJours) {
-        ajouterEvent(type, title, proprietaire, new DateHeureEvenement(dateDebut), dureeMinutes, lieu, participants,
-                frequenceJours);
-    }
-
     public void ajouterEvent(String type, String title, String proprietaire, DateHeureEvenement dateDebut,
             int dureeMinutes,
             String lieu, String participants, int frequenceJours) {
@@ -24,10 +17,6 @@ public class CalendarManager {
                 new ProprietaireEvenement(proprietaire), dateDebut, new DureeEvenement(dureeMinutes),
                 new LieuEvenement(lieu), new ParticipantsEvenement(participants), new FrequenceJours(frequenceJours));
         events.add(e);
-    }
-
-    public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        return eventsDansPeriode(new PeriodeEvenements(new DateHeureEvenement(debut), new DateHeureEvenement(fin)));
     }
 
     public List<Event> eventsDansPeriode(DateHeureEvenement debut, DateHeureEvenement fin) {

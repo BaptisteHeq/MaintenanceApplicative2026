@@ -1,7 +1,5 @@
 package projet;
 
-import java.time.LocalDateTime;
-
 public class Event {
     public EventId id;
     public TypeEvenement type;
@@ -13,19 +11,20 @@ public class Event {
     public ParticipantsEvenement participants; // separes par virgules (pour REUNION uniquement)
     public FrequenceJours frequenceJours; // uniquement pour PERIODIQUE
 
-    public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
+    public Event(String type, String title, String proprietaire, DateHeureEvenement dateDebut, int dureeMinutes,
             String lieu, String participants, int frequenceJours) {
         this(EventId.nouveau(), new TypeEvenement(type), new TitreEvenement(title),
-                new ProprietaireEvenement(proprietaire), new DateHeureEvenement(dateDebut),
+                new ProprietaireEvenement(proprietaire), dateDebut,
                 new DureeEvenement(dureeMinutes), new LieuEvenement(lieu),
                 new ParticipantsEvenement(participants),
                 new FrequenceJours(frequenceJours));
     }
 
-    public Event(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
+    public Event(TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire,
+            DateHeureEvenement dateDebut,
             DureeEvenement dureeMinutes,
             LieuEvenement lieu, ParticipantsEvenement participants, FrequenceJours frequenceJours) {
-        this(EventId.nouveau(), type, title, proprietaire, new DateHeureEvenement(dateDebut), dureeMinutes, lieu,
+        this(EventId.nouveau(), type, title, proprietaire, dateDebut, dureeMinutes, lieu,
                 participants, frequenceJours);
     }
 
@@ -42,14 +41,6 @@ public class Event {
         this.lieu = lieu;
         this.participants = participants;
         this.frequenceJours = frequenceJours;
-    }
-
-    public Event(EventId id, TypeEvenement type, TitreEvenement title, ProprietaireEvenement proprietaire,
-            LocalDateTime dateDebut,
-            DureeEvenement dureeMinutes,
-            LieuEvenement lieu, ParticipantsEvenement participants, FrequenceJours frequenceJours) {
-        this(id, type, title, proprietaire, new DateHeureEvenement(dateDebut), dureeMinutes, lieu, participants,
-                frequenceJours);
     }
 
     public String description() {

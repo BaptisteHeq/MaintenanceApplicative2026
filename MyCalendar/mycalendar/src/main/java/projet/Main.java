@@ -126,8 +126,8 @@ public class Main {
                                 LocalDateTime finMois = debutMois.plusMonths(1).minusSeconds(1);
 
                                 afficherListe(calendar.eventsDansPeriode(
-                                    new PeriodeEvenements(new DateHeureEvenement(debutMois),
-                                        new DateHeureEvenement(finMois))));
+                                        new PeriodeEvenements(new DateHeureEvenement(debutMois),
+                                                new DateHeureEvenement(finMois))));
                                 break;
 
                             case "3":
@@ -144,8 +144,8 @@ public class Main {
                                 LocalDateTime finSemaine = debutSemaine.plusDays(7).minusSeconds(1);
 
                                 afficherListe(calendar.eventsDansPeriode(
-                                    new PeriodeEvenements(new DateHeureEvenement(debutSemaine),
-                                        new DateHeureEvenement(finSemaine))));
+                                        new PeriodeEvenements(new DateHeureEvenement(debutSemaine),
+                                                new DateHeureEvenement(finSemaine))));
                                 break;
 
                             case "4":
@@ -160,8 +160,8 @@ public class Main {
                                 LocalDateTime finJour = debutJour.plusDays(1).minusSeconds(1);
 
                                 afficherListe(calendar.eventsDansPeriode(
-                                    new PeriodeEvenements(new DateHeureEvenement(debutJour),
-                                        new DateHeureEvenement(finJour))));
+                                        new PeriodeEvenements(new DateHeureEvenement(debutJour),
+                                                new DateHeureEvenement(finJour))));
                                 break;
                         }
                         break;
@@ -184,7 +184,8 @@ public class Main {
                         int duree = Integer.parseInt(scanner.nextLine());
 
                         calendar.ajouterEvent("RDV_PERSONNEL", titre, utilisateur,
-                                LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute), duree,
+                                new DateHeureEvenement(LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute)),
+                                duree,
                                 "", "", 0);
 
                         System.out.println("Événement ajouté.");
@@ -219,7 +220,8 @@ public class Main {
                         }
 
                         calendar.ajouterEvent("REUNION", titre2, utilisateur,
-                                LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2), duree2,
+                                new DateHeureEvenement(LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2)),
+                                duree2,
                                 lieu, participants, 0);
 
                         System.out.println("Événement ajouté.");
@@ -243,7 +245,8 @@ public class Main {
                         int frequence = Integer.parseInt(scanner.nextLine());
 
                         calendar.ajouterEvent("PERIODIQUE", titre3, utilisateur,
-                                LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3), 0,
+                                new DateHeureEvenement(LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3)),
+                                0,
                                 "", "", frequence);
 
                         System.out.println("Événement ajouté.");
@@ -266,7 +269,7 @@ public class Main {
 
                     default:
                         System.out.println("Déconnexion ! Voulez-vous continuer ? (O/N)");
-                        continuer = scanner.nextLine().trim().equalsIgnoreCase("oui");
+                        continuer = scanner.nextLine().trim().equalsIgnoreCase("O");
 
                         utilisateur = null;
                 }

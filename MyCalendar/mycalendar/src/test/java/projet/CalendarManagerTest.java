@@ -18,11 +18,12 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 LocalDateTime date = LocalDateTime.of(2026, 3, 20, 10, 0);
-                manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice", date, 30, "", "", 0);
+                manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice", new DateHeureEvenement(date), 30, "",
+                                "", 0);
 
                 List<Event> result = manager.eventsDansPeriode(
-                                LocalDateTime.of(2026, 3, 20, 0, 0),
-                                LocalDateTime.of(2026, 3, 20, 23, 59));
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 23, 59)));
 
                 assertEquals(1, result.size());
                 assertEquals("Dentiste", result.get(0).title.valeur());
@@ -33,7 +34,7 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
-                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)), 30, "", "", 0);
 
                 PeriodeEvenements periode = new PeriodeEvenements(
                                 new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 0, 0)),
@@ -50,11 +51,11 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
-                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)), 30, "", "", 0);
 
                 List<Event> result = manager.eventsDansPeriode(
-                                LocalDateTime.of(2026, 3, 21, 0, 0),
-                                LocalDateTime.of(2026, 3, 21, 23, 59));
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 21, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 21, 23, 59)));
 
                 assertTrue(result.isEmpty());
         }
@@ -64,11 +65,11 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
-                                LocalDateTime.of(2026, 3, 22, 10, 0), 30, "", "", 0);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 22, 10, 0)), 30, "", "", 0);
 
                 List<Event> result = manager.eventsDansPeriode(
-                                LocalDateTime.of(2026, 3, 21, 0, 0),
-                                LocalDateTime.of(2026, 3, 21, 23, 59));
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 21, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 21, 23, 59)));
 
                 assertTrue(result.isEmpty());
         }
@@ -78,11 +79,11 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 manager.ajouterEvent("PERIODIQUE", "Sport", "Alice",
-                                LocalDateTime.of(2026, 3, 1, 8, 0), 0, "", "", 2);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 1, 8, 0)), 0, "", "", 2);
 
                 List<Event> result = manager.eventsDansPeriode(
-                                LocalDateTime.of(2026, 3, 5, 0, 0),
-                                LocalDateTime.of(2026, 3, 5, 23, 59));
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 5, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 5, 23, 59)));
 
                 assertEquals(1, result.size());
                 assertEquals("Sport", result.get(0).title.valeur());
@@ -93,11 +94,11 @@ class CalendarManagerTest {
                 CalendarManager manager = new CalendarManager();
 
                 manager.ajouterEvent("PERIODIQUE", "Sport", "Alice",
-                                LocalDateTime.of(2026, 3, 1, 8, 0), 0, "", "", 2);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 1, 8, 0)), 0, "", "", 2);
 
                 List<Event> result = manager.eventsDansPeriode(
-                                LocalDateTime.of(2026, 3, 4, 0, 0),
-                                LocalDateTime.of(2026, 3, 4, 23, 59));
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 4, 0, 0)),
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 4, 23, 59)));
 
                 assertTrue(result.isEmpty());
         }
@@ -106,9 +107,11 @@ class CalendarManagerTest {
         void conflitRetourneTruePourChevauchement() {
                 CalendarManager manager = new CalendarManager();
 
-                Event e1 = new Event("RDV_PERSONNEL", "A", "Alice", LocalDateTime.of(2026, 3, 20, 10, 0),
+                Event e1 = new Event("RDV_PERSONNEL", "A", "Alice",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
                                 60, "", "", 0);
-                Event e2 = new Event("REUNION", "B", "Bob", LocalDateTime.of(2026, 3, 20, 10, 30),
+                Event e2 = new Event("REUNION", "B", "Bob",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 30)),
                                 30, "Salle", "Bob", 0);
 
                 assertTrue(manager.conflit(e1, e2));
@@ -118,9 +121,11 @@ class CalendarManagerTest {
         void conflitRetourneFalseSiPasChevauchement() {
                 CalendarManager manager = new CalendarManager();
 
-                Event e1 = new Event("RDV_PERSONNEL", "A", "Alice", LocalDateTime.of(2026, 3, 20, 10, 0),
+                Event e1 = new Event("RDV_PERSONNEL", "A", "Alice",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
                                 30, "", "", 0);
-                Event e2 = new Event("REUNION", "B", "Bob", LocalDateTime.of(2026, 3, 20, 11, 0),
+                Event e2 = new Event("REUNION", "B", "Bob",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 11, 0)),
                                 30, "Salle", "Bob", 0);
 
                 assertFalse(manager.conflit(e1, e2));
@@ -130,9 +135,11 @@ class CalendarManagerTest {
         void conflitRetourneFalseSiPeriodique() {
                 CalendarManager manager = new CalendarManager();
 
-                Event e1 = new Event("PERIODIQUE", "A", "Alice", LocalDateTime.of(2026, 3, 20, 10, 0),
+                Event e1 = new Event("PERIODIQUE", "A", "Alice",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
                                 30, "", "", 1);
-                Event e2 = new Event("REUNION", "B", "Bob", LocalDateTime.of(2026, 3, 20, 10, 15),
+                Event e2 = new Event("REUNION", "B", "Bob",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
                                 30, "Salle", "Bob", 0);
 
                 assertFalse(manager.conflit(e1, e2));
@@ -142,9 +149,11 @@ class CalendarManagerTest {
         void conflitRetourneFalseSiDeuxiemeEstPeriodique() {
                 CalendarManager manager = new CalendarManager();
 
-                Event e1 = new Event("REUNION", "A", "Alice", LocalDateTime.of(2026, 3, 20, 10, 0),
+                Event e1 = new Event("REUNION", "A", "Alice",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
                                 30, "Salle", "Alice", 0);
-                Event e2 = new Event("PERIODIQUE", "B", "Bob", LocalDateTime.of(2026, 3, 20, 10, 15),
+                Event e2 = new Event("PERIODIQUE", "B", "Bob",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 15)),
                                 30, "", "", 1);
 
                 assertFalse(manager.conflit(e1, e2));
@@ -154,9 +163,11 @@ class CalendarManagerTest {
         void conflitRetourneFalseSiPremierCommenceApresFinSecond() {
                 CalendarManager manager = new CalendarManager();
 
-                Event e1 = new Event("RDV_PERSONNEL", "A", "Alice", LocalDateTime.of(2026, 3, 20, 12, 0),
+                Event e1 = new Event("RDV_PERSONNEL", "A", "Alice",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 12, 0)),
                                 30, "", "", 0);
-                Event e2 = new Event("REUNION", "B", "Bob", LocalDateTime.of(2026, 3, 20, 10, 0),
+                Event e2 = new Event("REUNION", "B", "Bob",
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
                                 30, "Salle", "Bob", 0);
 
                 assertFalse(manager.conflit(e1, e2));
@@ -166,7 +177,7 @@ class CalendarManagerTest {
         void afficherEvenementsEcritLesDescriptions() {
                 CalendarManager manager = new CalendarManager();
                 manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
-                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)), 30, "", "", 0);
 
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 PrintStream originalOut = System.out;
@@ -186,7 +197,7 @@ class CalendarManagerTest {
         void supprimerEventSupprimeLEvenementCible() {
                 CalendarManager manager = new CalendarManager();
                 manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
-                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)), 30, "", "", 0);
 
                 EventId id = manager.events.get(0).id;
 
@@ -200,7 +211,7 @@ class CalendarManagerTest {
         void supprimerEventRetourneFalseSiIdAbsent() {
                 CalendarManager manager = new CalendarManager();
                 manager.ajouterEvent("RDV_PERSONNEL", "Dentiste", "Alice",
-                                LocalDateTime.of(2026, 3, 20, 10, 0), 30, "", "", 0);
+                                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)), 30, "", "", 0);
 
                 boolean supprime = manager.supprimerEvent(new EventId("inconnu"));
 

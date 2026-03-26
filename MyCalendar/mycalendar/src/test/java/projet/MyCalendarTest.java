@@ -37,7 +37,8 @@ public class MyCalendarTest {
         Method method = Main.class.getDeclaredMethod("afficherListe", List.class);
         method.setAccessible(true);
 
-        Event e = new Event("RDV_PERSONNEL", "Dentiste", "Alice", LocalDateTime.of(2026, 3, 20, 10, 0),
+        Event e = new Event("RDV_PERSONNEL", "Dentiste", "Alice",
+                new DateHeureEvenement(LocalDateTime.of(2026, 3, 20, 10, 0)),
                 30, "", "", 0);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
