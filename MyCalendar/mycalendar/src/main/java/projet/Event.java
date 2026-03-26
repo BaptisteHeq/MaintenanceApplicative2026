@@ -8,14 +8,14 @@ public class Event {
     public ProprietaireEvenement proprietaire;
     public LocalDateTime dateDebut;
     public DureeEvenement dureeMinutes;
-    public String lieu; // utilisé seulement pour REUNION
+    public LieuEvenement lieu; // utilise seulement pour REUNION
     public String participants; // séparés par virgules (pour REUNION uniquement)
     public FrequenceJours frequenceJours; // uniquement pour PERIODIQUE
 
     public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
             String lieu, String participants, int frequenceJours) {
         this(type, new TitreEvenement(title), new ProprietaireEvenement(proprietaire), dateDebut,
-                new DureeEvenement(dureeMinutes), lieu,
+                new DureeEvenement(dureeMinutes), new LieuEvenement(lieu),
                 participants,
                 new FrequenceJours(frequenceJours));
     }
@@ -37,6 +37,13 @@ public class Event {
     public Event(String type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
             DureeEvenement dureeMinutes,
             String lieu, String participants, FrequenceJours frequenceJours) {
+        this(type, title, proprietaire, dateDebut, dureeMinutes, new LieuEvenement(lieu), participants,
+                frequenceJours);
+    }
+
+    public Event(String type, TitreEvenement title, ProprietaireEvenement proprietaire, LocalDateTime dateDebut,
+            DureeEvenement dureeMinutes,
+            LieuEvenement lieu, String participants, FrequenceJours frequenceJours) {
         this.type = type;
         this.title = title;
         this.proprietaire = proprietaire;
